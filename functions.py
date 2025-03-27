@@ -12,16 +12,20 @@ def save_game(winner, hero_name="", num_stars=0):
 # Load the most recent game result from the text log
 def load_game():
     try:
-        with open("save.txt", "r") as file:
-            print("    |    Loading from saved file ...")
-            lines = file.readlines()
-            if lines:
-                last_line = lines[-1].strip()
-                print(last_line)
-                return last_line
+        with open("save.txt", "r") as f:
+            lines = f.readlines()
+            total_stars = 0
+            for line in lines:
+                if "gained" in line:
+                    try:
+                        stars = int(line.split("gained")[1].strip().split()[0])
+                        total_stars += stars
+                    except:
+                        continue
+            return total_stars
     except FileNotFoundError:
-        print("No previous game found. Starting fresh.")
-        return None
+        return 0
+
 
 # Use an item from the belt before a monster encounter
 def use_loot(belt, health_points):
