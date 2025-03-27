@@ -138,12 +138,14 @@ if not input_invalid:
     game_result = functions.load_game()
     monsters_killed = 0
 
-    if game_result and "Hero" in game_result:
-        try:
-            print(game_result)
-            monsters_killed = sum([int(line.split("gained")[1].strip().split()[0]) for line in open("save.txt") if "gained" in line])
-        except (IndexError, ValueError):
-            monsters_killed = 0
+    try:
+        with open("save.txt", "r") as file:
+            lines = file.readlines()
+            for line in lines:
+                if "gained" in line:
+                    monsters_killed += int(line.split("gained")[1].strip().split()[0])
+    except (FileNotFoundError, IndexError, ValueError):
+        monsters_killed = 0
 
     hero_level = monsters_killed // 3
     print("    |    Based on your game history, your hero level is:", hero_level)
