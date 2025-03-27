@@ -218,7 +218,7 @@ if not input_invalid:
     # ---------------------------PENNY: CRAZY SCIENTIST----------------------------------
     # ---------------------------JAMES: DRAGON'S DEN-------------------------------------
 
-    print("DEBUG: Selected hero dragons:", [dragon['name'] for dragon in hero_dragons])
+    print("The hero has selected these dragons from the Dragon's Den:", [dragon['name'] for dragon in hero_dragons])
 
     # Fight Sequence
     # Loop while the monster and the player are alive. Call fight sequence functions
@@ -238,16 +238,17 @@ if not input_invalid:
 
             # Check if a dragon enters the battle (Shield or Attack)
             for dragon in hero_dragons:
-                if health_points < 15 and dragon ["role"] == "Shield":
-                # if health_points < 10 and health_points % 2 == 0 and dragon["role"] == "Shield":
+                # if health_points < 5 and dragon ["role"] == "Shield":
+                if health_points < 10 and health_points % 2 == 0 and dragon["role"] == "Shield":
+                    print(f" {dragon['name']} will shield you from the monster's attack!")
                     print(f"     |  {dragon['name']} shields you from damage!")
-                elif dragon ["role"] == "Attack":
-                # elif 10 < health_points < 20 and health_points % 2 != 0 and dragon["role"] == "Shield":
-                #    print(f"     |  {dragon['name']} shields you from damage!")
-                # elif dragon["role"] == "Attack":
-                    print(f"DEBUG: {dragon['name']} is attacking!")
-                    print(f"     |  {dragon['name']} joins the attack!")
-                    m_health_points -= 13
+                    health_points += 10
+                    print("health points: " + str(health_points))
+                elif 10 < health_points < 20 and health_points % 2 != 0 and dragon["role"] == "Attack":
+                    print(f" {dragon['name']} joins the attack!")
+                    print(f"     |  {dragon['name']} attacks causing damage!")
+                    m_health_points -= 5
+                    print("monster health points: " + str(m_health_points))
 
             # Hero attacks the monster
             m_health_points = functions.hero_attacks(combat_strength, m_health_points)
