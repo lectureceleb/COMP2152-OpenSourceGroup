@@ -1,5 +1,7 @@
 # Import the random library to use for the dice later
 import random
+import os
+import json
 
 def use_loot(belt, health_points):
     good_loot_options = ["Health Potion", "Leather Boots"]
@@ -151,6 +153,7 @@ def inception_dream(num_dream_lvls):
         return 1 + int(inception_dream(num_dream_lvls - 1))
 
 
+<<<<<<< Updated upstream
 def save_game(winner, hero_name="", num_stars=0):
     with open("save.txt", "a") as file:
         if winner == "Hero":
@@ -159,20 +162,35 @@ def save_game(winner, hero_name="", num_stars=0):
             file.write("Monster has killed the hero previously\n")
 
 
+=======
+def save_game(winner, hero_name, num_stars):
+    data = load_game()
+    if winner == "Hero":
+        data["monsters_defeated"] = data.get("monsters_defeated", 0) + 1
+
+    # Save updated game state
+    with open("save.txt", "w") as file:
+        json.dump(data, file)
+
+
+>>>>>>> Stashed changes
 def load_game():
-    try:
-        with open("save.txt", "r") as file:
-            print("    |    Loading from saved file ...")
-            lines = file.readlines()
-            if lines:
-                last_line = lines[-1].strip()
-                print(last_line)
-                return last_line
-    except FileNotFoundError:
-        print("No previous game found. Starting fresh.")
-        return None
+    if not os.path.exists("save.txt"):
+        return {"monsters_defeated": 0}
+
+    with open("save.txt", "r") as file:
+        try:
+            data = json.load(file)
+        except json.JSONDecodeError:
+            return {"monsters_defeated": 0}
+
+    return data
 
 
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
 def adjust_combat_strength(combat_strength, m_combat_strength):
     last_game = load_game()
     if last_game:

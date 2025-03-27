@@ -158,6 +158,61 @@ if not input_invalid:
         print("    |    You are facing a REGULAR monster.")
 
     # Fight logic
+    # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
+    # ---------------------------NEZIHE: LEVEL UP-------------------------------------------
+    print("    |", end="    ")
+    print("Loading previous game results...")
+
+    past_data = functions.load_game()
+    total_monsters_killed = past_data.get("monsters_defeated", 0)
+
+    hero_level = total_monsters_killed // 3
+    print(f"    |    Hero Level based on past wins: {hero_level}")
+
+    if hero_level >= 3:
+        m_health_points += 10
+        m_combat_strength = min(6, m_combat_strength + 2)
+        print("    |    Beware! An Elite Monster appears! (+10 HP, +2 Strength)")
+    elif hero_level >= 1:
+        m_health_points += 5
+        m_combat_strength = min(6, m_combat_strength + 1)
+        print("    |    A stronger monster approaches. (+5 HP, +1 Strength)")
+    else:
+        print("    |    A regular monster awaits. Good luck!")
+
+    # ----------------  Safe Type and Minimum Value Enforcement ----------------
+    # This ensures all values are integers and have a minimum of 1 to avoid bugs
+    health_points = max(1, int(health_points))
+    combat_strength = max(1, int(combat_strength))
+    m_health_points = max(1, int(m_health_points))
+    m_combat_strength = max(1, int(m_combat_strength))
+
+
+    print("    |", end="    ")
+    print("Loading previous game results...")
+
+    past_data = functions.load_game()
+    total_monsters_killed = past_data.get("monsters_defeated", 0)
+
+    hero_level = total_monsters_killed // 3
+    print(f"    |    Hero Level based on past wins: {hero_level}")
+
+    if hero_level >= 3:
+        m_health_points += 10
+        m_combat_strength = min(6, m_combat_strength + 2)
+        print("    |    Beware! An Elite Monster appears! (+10 HP, +2 Strength)")
+    elif hero_level >= 1:
+        m_health_points += 5
+        m_combat_strength = min(6, m_combat_strength + 1)
+        print("    |    A stronger monster approaches. (+5 HP, +1 Strength)")
+    else:
+        print("    |    A regular monster awaits. Good luck!")
+
+    # ---------------------------PENNY: CRAZY SCIENTIST----------------------------------
+    # ---------------------------JAMES: DRAGON'S DEN-------------------------------------
+
+    # Fight Sequence
+    # Loop while the monster and the player are alive. Call fight sequence functions
     print("    ------------------------------------------------------------------")
     print("    |    You meet the monster. FIGHT!!")
     while m_health_points > 0 and health_points > 0:
