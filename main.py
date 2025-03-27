@@ -203,7 +203,42 @@ if not input_invalid:
         print("num_dream_lvls: ", num_dream_lvls)
 
     # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
-    # ---------------------------NEZ: LEVEL UP-------------------------------------------
+    # ---------------------------NEZIHE: LEVEL UP-------------------------------------------
+
+    # Load the last game result to determine the hero's current level
+    # Based on the number of monsters killed in previous games
+
+    # Load previous game result
+    game_result = functions.load_game()
+
+    # Start with zero monsters killed
+    monsters_killed = 0
+
+    # If the last game result exists and the Hero won
+    if game_result and "Hero" in game_result:
+        try:
+            # Extract the number of stars gained (used as proxy for monsters killed)
+            # Example format: 'Hero Nez has killed a monster and gained 3 stars.'
+            monsters_killed = int(game_result.split("gained")[1].strip().split()[0])
+        except (IndexError, ValueError):
+            monsters_killed = 0
+
+    # Calculate hero level: 1 level per 3 monsters killed
+    hero_level = monsters_killed // 3
+    print("    |    Based on your game history, your hero level is:", hero_level)
+
+    # Increase the monster's difficulty based on the hero's level
+    if hero_level >= 3:
+        print("    |    You are facing an ELITE monster due to your level.")
+        m_health_points += 10
+        m_combat_strength = min(6, m_combat_strength + 2)
+    elif hero_level >= 1:
+        print("    |    You are facing a STRONGER monster due to your level.")
+        m_health_points += 5
+        m_combat_strength = min(6, m_combat_strength + 1)
+    else:
+        print("    |    You are facing a REGULAR monster.")
+
     # ---------------------------PENNY: CRAZY SCIENTIST----------------------------------
     # ---------------------------JAMES: DRAGON'S DEN-------------------------------------
 

@@ -202,3 +202,16 @@ def adjust_combat_strength(combat_strength, m_combat_strength):
             print("    |    ... Based on your previous game, neither the hero nor the monster's combat strength will be increased")
 
 
+# Read the file that has the info from past games
+def load_game():
+    try:
+        with open("save.txt", "r") as file:
+            print("    |    Loading from saved file ...")
+            lines = file.readlines()
+            if lines:
+                last_line = lines[-1].strip()
+                print(last_line)
+                return last_line
+    except FileNotFoundError:
+        print("No previous game found. Starting fresh.")
+        return None
