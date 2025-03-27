@@ -57,7 +57,6 @@ if not input_invalid:
     weapon_roll = random.choice(small_dice_options)
     combat_strength = min(6, (combat_strength + weapon_roll))
     print("    |    The hero's weapon is " + str(weapons[weapon_roll - 1]))
-    functions.adjust_combat_strength(combat_strength, m_combat_strength)
 
     print("    ------------------------------------------------------------------")
     print("    |", end="    ")
@@ -135,9 +134,7 @@ if not input_invalid:
 
     # Load previous game state to determine level-up
     print("    |    Loading from saved file ...")
-    game_result = functions.load_game()
     monsters_killed = 0
-
     try:
         with open("save.txt", "r") as file:
             lines = file.readlines()
