@@ -134,15 +134,14 @@ if not input_invalid:
 
     # Load previous game state to determine level-up
     print("    |    Loading from saved file ...")
+    game_result = functions.load_game()
     monsters_killed = 0
-    try:
-        with open("save.txt", "r") as file:
-            lines = file.readlines()
-            for line in lines:
-                if "gained" in line:
-                    monsters_killed += int(line.split("gained")[1].strip().split()[0])
-    except (FileNotFoundError, IndexError, ValueError):
-        monsters_killed = 0
+
+    if isinstance(game_result, str) and "gained" in game_result:
+        try:
+            monsters_killed = int(game_result.split("gained")[1].strip().split()[0])
+        except (IndexError, ValueError):
+            monsters_killed = 0
 
     hero_level = monsters_killed // 3
     print("    |    Based on your game history, your hero level is:", hero_level)
