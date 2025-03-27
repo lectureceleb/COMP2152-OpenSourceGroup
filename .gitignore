@@ -1,0 +1,14 @@
+# Virtual environment
+.venv/
+
+# PyCharm IDE files
+.idea/
+
+# Python bytecode cache
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS system files
+.DS_Store
+

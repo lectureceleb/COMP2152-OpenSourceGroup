@@ -1,4 +1,3 @@
-
 # Import the random library to use for the dice later
 import random
 
@@ -131,91 +130,93 @@ if not input_invalid:
                 print("health points: " + str(health_points))
         print("num_dream_lvls: ", num_dream_lvls)
 
-# Load the last game result to determine the hero's current level
-game_result = functions.load_game()
-monsters_killed = 0
+    # Final game logic continues...
+    health_points = max(1, health_points)
 
-if game_result and "Hero" in game_result:
-    try:
-        monsters_killed = int(game_result.split("gained")[1].strip().split()[0])
-    except (IndexError, ValueError):
-        monsters_killed = 0
+    # Load previous game state to determine level-up
+    game_result = functions.load_game()
+    monsters_killed = 0
 
-hero_level = monsters_killed // 3
-print("    |    Based on your game history, your hero level is:", hero_level)
+    if game_result and "Hero" in game_result:
+        try:
+            monsters_killed = int(game_result.split("gained")[1].strip().split()[0])
+        except (IndexError, ValueError):
+            monsters_killed = 0
 
-if hero_level >= 3:
-    print("    |    You are facing an ELITE monster due to your level.")
-    m_health_points += 10
-    m_combat_strength = min(6, m_combat_strength + 2)
-elif hero_level >= 1:
-    print("    |    You are facing a STRONGER monster due to your level.")
-    m_health_points += 5
-    m_combat_strength = min(6, m_combat_strength + 1)
-else:
-    print("    |    You are facing a REGULAR monster.")
+    hero_level = monsters_killed // 3
+    print("    |    Based on your game history, your hero level is:", hero_level)
 
-# Fight Sequence
-print("    ------------------------------------------------------------------")
-print("    |    You meet the monster. FIGHT!!")
-while m_health_points > 0 and health_points > 0:
-    print("    |", end="    ")
-    input("Roll to see who strikes first (Press Enter)")
-    attack_roll = random.choice(small_dice_options)
-
-    if not (attack_roll % 2 == 0):
-        print("    |", end="    ")
-        input("You strike (Press enter)")
-        m_health_points = functions.hero_attacks(combat_strength, m_health_points)
-        if m_health_points == 0:
-            num_stars = 3
-        else:
-            print("    |", end="    ")
-            print("------------------------------------------------------------------")
-            input("    |    The monster strikes (Press enter)!!!")
-            health_points = functions.monster_attacks(m_combat_strength, health_points)
-            if health_points == 0:
-                num_stars = 1
-            else:
-                num_stars = 2
+    if hero_level >= 3:
+        print("    |    You are facing an ELITE monster due to your level.")
+        m_health_points += 10
+        m_combat_strength = min(6, m_combat_strength + 2)
+    elif hero_level >= 1:
+        print("    |    You are facing a STRONGER monster due to your level.")
+        m_health_points += 5
+        m_combat_strength = min(6, m_combat_strength + 1)
     else:
+        print("    |    You are facing a REGULAR monster.")
+
+    # Fight logic
+    print("    ------------------------------------------------------------------")
+    print("    |    You meet the monster. FIGHT!!")
+    while m_health_points > 0 and health_points > 0:
         print("    |", end="    ")
-        input("The Monster strikes (Press enter)")
-        health_points = functions.monster_attacks(m_combat_strength, health_points)
-        if health_points == 0:
-            num_stars = 1
-        else:
+        input("Roll to see who strikes first (Press Enter)")
+        attack_roll = random.choice(small_dice_options)
+
+        if not (attack_roll % 2 == 0):
             print("    |", end="    ")
-            print("------------------------------------------------------------------")
-            input("The hero strikes!! (Press enter)")
+            input("You strike (Press enter)")
             m_health_points = functions.hero_attacks(combat_strength, m_health_points)
             if m_health_points == 0:
                 num_stars = 3
             else:
-                num_stars = 2
+                print("    |", end="    ")
+                print("------------------------------------------------------------------")
+                input("    |    The monster strikes (Press enter)!!!")
+                health_points = functions.monster_attacks(m_combat_strength, health_points)
+                if health_points == 0:
+                    num_stars = 1
+                else:
+                    num_stars = 2
+        else:
+            print("    |", end="    ")
+            input("The Monster strikes (Press enter)")
+            health_points = functions.monster_attacks(m_combat_strength, health_points)
+            if health_points == 0:
+                num_stars = 1
+            else:
+                print("    |", end="    ")
+                print("------------------------------------------------------------------")
+                input("The hero strikes!! (Press enter)")
+                m_health_points = functions.hero_attacks(combat_strength, m_health_points)
+                if m_health_points == 0:
+                    num_stars = 3
+                else:
+                    num_stars = 2
 
-winner = "Hero" if m_health_points <= 0 else "Monster"
+    winner = "Hero" if m_health_points <= 0 else "Monster"
 
-# Final Score Display
-tries = 0
-input_invalid = True
-while input_invalid and tries in range(5):
-    print("    |", end="    ")
-    hero_name = input("Enter your Hero's name (in two words)")
-    name = hero_name.split()
-    if len(name) != 2:
-        print("    |    Please enter a name with two parts (separated by a space)")
-        tries += 1
-    else:
-        if not name[0].isalpha() or not name[1].isalpha():
-            print("    |    Please enter an alphabetical name")
+    tries = 0
+    input_invalid = True
+    while input_invalid and tries in range(5):
+        print("    |", end="    ")
+        hero_name = input("Enter your Hero's name (in two words)")
+        name = hero_name.split()
+        if len(name) != 2:
+            print("    |    Please enter a name with two parts (separated by a space)")
             tries += 1
         else:
-            short_name = name[0][0:2:1] + name[1][0:1:1]
-            print("    |    I'm going to call you " + short_name + " for short")
-            input_invalid = False
+            if not name[0].isalpha() or not name[1].isalpha():
+                print("    |    Please enter an alphabetical name")
+                tries += 1
+            else:
+                short_name = name[0][0:2:1] + name[1][0:1:1]
+                print("    |    I'm going to call you " + short_name + " for short")
+                input_invalid = False
 
-if not input_invalid:
-    stars_display = "*" * num_stars
-    print("    |    Hero " + short_name + " gets <" + stars_display + "> stars")
-    functions.save_game(winner, hero_name=short_name, num_stars=num_stars)
+    if not input_invalid:
+        stars_display = "*" * num_stars
+        print("    |    Hero " + short_name + " gets <" + stars_display + "> stars")
+        functions.save_game(winner, hero_name=short_name, num_stars=num_stars)
