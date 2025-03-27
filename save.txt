@@ -1,2 +1,1 @@
-
-Hero AAB has killed a monster and gained 3 stars.
+Hero aab has killed a monster and gained 3 stars.
