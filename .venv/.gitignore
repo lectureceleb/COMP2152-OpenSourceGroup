@@ -1,0 +1,14 @@
+# PyCharm project settings
+.idea/
+
+# Python bytecode and cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment (optional, çünkü .venv klasörünün kendisi dışlanabilir)
+.venv/
+
+
+# macOS system file
+.DS_Store
