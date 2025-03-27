@@ -205,6 +205,92 @@ if not input_invalid:
     # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
     # ---------------------------NEZ: LEVEL UP-------------------------------------------
     # ---------------------------PENNY: CRAZY SCIENTIST----------------------------------
+
+    # Crazy Scientist Feature
+    print("    ------------------------------------------------------------------")
+    print("    |    The Hero comes across a door that leads into a Science Lab")
+    input("    |    Is the door unlocked? Roll the dice to find out! (Press enter)")
+    door_roll = random.choice(big_dice_options)
+    door_unlocked = False
+    mood = "bad_mood"
+
+    if door_roll in range (1, 17):
+        door_unlocked = True
+        print("    |    The door is unlocked")
+        print("    |    You go inside to see a Scientist working")
+        input("    |    Roll the dice to find out if the Scientist is in a good or bad mood. (Press enter)")
+
+        mood_roll = random.choice(small_dice_options)
+        print("    |    ")
+
+        if mood_roll % 2 == 0:
+            mood = "good_mood"
+            print("    |    Great news, the Scientist is in a good mood today and will attempt an experiment "
+                  "to help you fight the monster.")
+        elif mood_roll % 2 == 1:
+            mood = "bad_mood"
+            print("    |    Oh no, the Scientist is angry to have been disturbed!")
+            print("    |    Now they are in a bad mood and will attempt an experiment to help the monster!")
+
+        # This code should only execute if the door is unlocked
+        # Define the possible outcomes of the cloning experiment
+        cloning_experiments_and_outcomes = {
+            'good_mood': ['The hero have been successfully cloned!',
+                          'The attempt to clone the hero failed!',
+                          'The hero has been cloned, but it was a very strenuous and the hero is now weakened.'
+                          ],
+            'bad_mood': ['Oh no! The monster has been successfully cloned!',
+                         'What a relief, the attempt to clone the monster failed!',
+                         'Plot twist! The monster clone joins the hero to fight the original monster.'
+                         ]
+        }
+
+        # The possible cloning outcomes is based on mood
+        possible_cloning_outcomes = [outcome for key, outcomes in cloning_experiments_and_outcomes.items()
+                                     if key == mood for outcome in outcomes]
+
+        print(f"    |    The possible cloning outcomes are: {possible_cloning_outcomes}")
+        input(
+            "    |    Continue to find out what happens when the Scientist attempts their experiment. (Press enter)")
+
+        # Roll the dice to select one of the possible cloning outcomes
+        outcome_roll = random.choice(possible_cloning_outcomes)
+        print("    |    The outcome of the experiment is:")
+        print(f"    |    {outcome_roll}")
+        if outcome_roll == 'The hero have been successfully cloned!':
+            print("    |    As a result the Hero's Combat Strength and Health Points have doubled.")
+            health_points *= 2
+            combat_strength *= 2
+        elif outcome_roll == 'The attempt to clone the hero failed!':
+            print("    |    No change is made to the Hero's Combat Strength and Health Points.")
+        elif outcome_roll == 'The hero has been cloned, but it was a very strenuous and the hero is now weakened.':
+            print("    |    The Hero's Combat Strength is reduced to half but the Health Points have doubled.")
+            health_points *= 2
+            combat_strength //= 2
+        elif outcome_roll == 'Oh no! The monster has been successfully cloned!':
+            print("    |    As a result the Monster's Combat Strength and Health Points have doubled.")
+            m_health_points *= 2
+            m_combat_strength *= 2
+        elif outcome_roll == 'What a relief, the attempt to clone the monster failed!':
+            print("    |    No change is made to the Monster's Combat Strength and Health Points.")
+        elif outcome_roll == 'Plot twist! The monster clone joins the hero to fight the original monster.':
+            print("    |    As a result the Monster's Combat Strength and Health Points have been reduced to half.")
+            m_health_points //= 2
+            m_combat_strength //= 2
+        print("    |    You escape from the Science Lab before something even crazier happens!")
+    else:
+        print("    |    The door is locked and you cannot enter.")
+
+    # Print out the updated combat strength and health points for the Hero and Monster
+    print("")
+    print("    |    The Hero and Monster Combat Strength and Health Points are set as follows:")
+    print(f"Hero's Health Points: {health_points}")
+    print(f"Hero's Combat Strength: {combat_strength}")
+    print(f"Monster's Health Points: {m_health_points}")
+    print(f"Monster's Combat Strength: {m_combat_strength}")
+    print("")
+    print("    ------------------------------------------------------------------")
+
     # ---------------------------JAMES: DRAGON'S DEN-------------------------------------
 
     # Fight Sequence
