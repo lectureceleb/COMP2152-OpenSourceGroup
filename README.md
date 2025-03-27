@@ -22,4 +22,3 @@ To dynamically adjust the monster's difficulty level based on how many monsters 
 ### Benefits
 - Adds replay value by increasing difficulty as the player improves.
 - Simple logic that integrates seamlessly with the main game flow.
-- Encourages progression and tracks player performance over time.
