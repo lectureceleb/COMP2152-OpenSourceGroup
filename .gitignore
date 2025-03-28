@@ -1,0 +1,10 @@
+# Ignore PyCharm and VS Code settings
+.idea/
+.vscode/
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore text files if not needed in the repo
+save.txt
