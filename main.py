@@ -528,6 +528,10 @@ if not input_invalid:
                     print("monster health points: " + str(m_health_points))
                     break  # Stop after the first Attack dragon acts
 
+                else:
+                    # This handles the case where the dragon neither shields nor attacks
+                    print(f"The monster strikes fear in {dragon['name']} who does not act this turn.")
+
             # Hero attacks the monster
             m_health_points = functions.hero_attacks(combat_strength, m_health_points)
 
@@ -569,6 +573,11 @@ if not input_invalid:
                     m_health_points -= 5
                     print("monster health points: " + str(m_health_points))
                     break  # Stop after the first Attack dragon acts
+
+                else:
+                    # This handles the case where the dragon neither shields nor attacks
+                    print(f"The monster strikes fear in {dragon['name']} who does not act this turn.")
+
 
             # Monster attacks the hero
             if wizard_protection:
