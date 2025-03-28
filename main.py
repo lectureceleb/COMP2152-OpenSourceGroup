@@ -224,7 +224,25 @@ if not input_invalid:
     # Loop while the monster and the player are alive. Call fight sequence functions
     print("    ------------------------------------------------------------------")
     print("    |    You meet the monster. FIGHT!!")
+
+    wizard_protection = False
+
     while m_health_points > 0 and health_points > 0:
+
+        # Check to see if the wizard appears to assist the hero
+        if health_points <= 6:
+            print("     |     A wizard appears in a burst of magical energy!")
+
+            if health_points % 2 == 0:  # Even number health points: Grant temporary invincibility
+                print("     |     The wizard casts a spell...You are invincible for one attack!")
+                wizard_protection = True  # Set protection flag
+
+            else:  # Odd number health points: Gain 10 health points
+                print("     |     The wizard waves his staff...The spell heals you by 10 health points!")
+                health_points += 10
+                print("     |     Your new health is: " + str(health_points) + "HP")
+
+
         # Fight Sequence
         print("    |", end="    ")
 
@@ -261,7 +279,11 @@ if not input_invalid:
                 input("     |     The monster strikes (Press enter)!!!")
 
                 # Monster attacks hero
-                health_points = functions.monster_attacks(m_combat_strength, health_points)
+                if wizard_protection:
+                    print("     |     The wizard’s magic shields you! No damage taken.")
+                    wizard_protection = False  # Remove protection after one attack
+                else:
+                    health_points = functions.monster_attacks(m_combat_strength, health_points)
 
                 if health_points == 0:
                     num_stars = 1
@@ -275,13 +297,22 @@ if not input_invalid:
             # Check if a dragon should shield the hero
             for dragon in hero_dragons:
                 if health_points < 10 and health_points % 2 == 0 and dragon["role"] == "Shield":
+                    print(f" {dragon['name']} will shield you from the monster's attack!")
                     print(f"     |  {dragon['name']} shields you from damage!")
-                elif 10 < health_points < 20 and health_points % 2 != 0 and dragon["role"] == "Shield":
-                    print(f"     |  {dragon['name']} shields you from damage!")
-
+                    health_points += 10
+                    print("health points: " + str(health_points))
+                elif 10 < health_points < 20 and health_points % 2 != 0 and dragon["role"] == "Attack":
+                    print(f" {dragon['name']} joins the attack!")
+                    print(f"     |  {dragon['name']} attacks causing damage!")
+                    m_health_points -= 5
+                    print("monster health points: " + str(m_health_points))
 
             # Monster attacks the hero
-            health_points = functions.monster_attacks(m_combat_strength, health_points)
+            if wizard_protection:
+                print("     |     The wizard’s magic shields you! No damage taken.")
+                wizard_protection = False  # Remove protection after one attack
+            else:
+                health_points = functions.monster_attacks(m_combat_strength, health_points)
 
             if health_points == 0:
                 num_stars = 1
