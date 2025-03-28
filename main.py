@@ -209,10 +209,10 @@ if not input_invalid:
                 health_points -= 1
                 crazy_level = functions.inception_dream(num_dream_lvls)
                 combat_strength += crazy_level
-                print("combat strength: " + str(combat_strength))
-                print("health points: " + str(health_points))
-        print("num_dream_lvls: ", num_dream_lvls)
-        print("m_health_points: ", str(m_health_points))
+                print("Hero's Combat Strength: " + str(combat_strength))
+                print("Hero's Health Points: " + str(health_points))
+        print("Dream Levels: ", num_dream_lvls)
+        print("Monster's Combat Strength: ", str(m_health_points))
 
     # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
 
