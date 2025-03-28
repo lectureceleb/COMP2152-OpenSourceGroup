@@ -36,31 +36,57 @@ while input_invalid and i in range(5):
     print("    |", end="    ")
     m_combat_strength = input("Enter the monster's combat Strength (1-6): ")
 
+    # Validate input: Check if the string inputted is numeric
     if (not combat_strength.isnumeric()) or (not m_combat_strength.isnumeric()):
+        # If one of the inputs are invalid, print error message and halt
         print("    |    One or more invalid inputs. Player needs to enter integer numbers for Combat Strength    |")
-        i += 1
+        i = i + 1
         continue
-    elif (int(combat_strength) not in range(1, 7)) or (int(m_combat_strength) not in range(1, 7)):
+
+    # Note: Now safe to cast combat_strength to integer
+    # Validate input: Check if the string inputted
+    elif (int(combat_strength) not in range(1, 7)) or (int(m_combat_strength)) not in range(1, 7):
         print("    |    Enter a valid integer between 1 and 6 only")
-        i += 1
+        i = i + 1
         continue
+
     else:
         input_invalid = False
         break
 
 if not input_invalid:
+    input_invalid = False
     combat_strength = int(combat_strength)
     m_combat_strength = int(m_combat_strength)
 
+    # Roll for weapon
     print("    |", end="    ")
     input("Roll the dice for your weapon (Press enter)")
-    weapon_roll = random.choice(small_dice_options)
-    combat_strength = min(6, (combat_strength + weapon_roll))
-    print("    |    The hero's weapon is " + str(weapons[weapon_roll - 1]))
+    ascii_image5 = """
+           .-------.    ______
+          |   o   ||   ||     |
+         |_______|o|  |o |  o  |
+         | o     | | |   o|_____|
+         |   o   |o/ |o   |o    |
+         |     o |/   | o|  o  |
+         '-------'     ||____o|         
+            """
 
+    print(ascii_image5)
+    weapon_roll = random.choice(small_dice_options)
+
+    # Limit the combat strength to 6
+    combat_strength = min(6, (combat_strength + weapon_roll))
+    print("    |    The hero\'s weapon is " + str(weapons[weapon_roll - 1]))
+
+    # Call the function to adjust the combat strength
+    functions.adjust_combat_strength(combat_strength, m_combat_strength)
+
+    # Weapon Roll Analysis
     print("    ------------------------------------------------------------------")
     print("    |", end="    ")
     input("Analyze the Weapon roll (Press enter)")
+    print("    |", end="    ")
     if weapon_roll <= 2:
         print("--- You rolled a weak weapon, friend")
     elif weapon_roll <= 4:
@@ -68,61 +94,108 @@ if not input_invalid:
     else:
         print("--- Nice weapon, friend!")
 
+    # If the weapon rolled is not a Fist, print out "Thank goodness you didn't roll the Fist..."
     if weapons[weapon_roll - 1] != "Fist":
         print("    |    --- Thank goodness you didn't roll the Fist...")
 
+    # Roll for player health points
     print("    |", end="    ")
     input("Roll the dice for your health points (Press enter)")
     health_points = random.choice(big_dice_options)
     print("    |    Player rolled " + str(health_points) + " health points")
 
+    # Roll for monster health points
     print("    |", end="    ")
     input("Roll the dice for the monster's health points (Press enter)")
     m_health_points = random.choice(big_dice_options)
     print("    |    Player rolled " + str(m_health_points) + " health points for the monster")
 
+    # Collect Loot
     print("    ------------------------------------------------------------------")
     print("    |    !!You find a loot bag!! You look inside to find 2 items:")
     print("    |", end="    ")
     input("Roll for first item (enter)")
+
+    # Collect Loot First time
     loot_options, belt = functions.collect_loot(loot_options, belt)
     print("    ------------------------------------------------------------------")
     print("    |", end="    ")
     input("Roll for second item (Press enter)")
+
+    # Collect Loot Second time
     loot_options, belt = functions.collect_loot(loot_options, belt)
+
+    print("    |    You're super neat, so you organize your belt alphabetically:")
     belt.sort()
     print("    |    Your belt: ", belt)
 
+    # Use Loot
     belt, health_points = functions.use_loot(belt, health_points)
-    health_points = max(1, health_points)
 
     print("    ------------------------------------------------------------------")
     print("    |", end="    ")
     input("Analyze the roll (Press enter)")
+    # Compare Player vs Monster's strength
     print("    |    --- You are matched in strength: " + str(combat_strength == m_combat_strength))
+
+    # Check the Player's overall strength and health
     print("    |    --- You have a strong player: " + str((combat_strength + health_points) >= 15))
 
+    # Roll for the monster's power
     print("    |", end="    ")
     input("Roll for Monster's Magic Power (Press enter)")
+    ascii_image4 = """                                                                       
+                                 @@@                        
+                                 @@@@@@@            @@         
+                                 @@@ @@@@@@    @@@@@@@@        
+                                 @@@    @@@@@@@  @@@         
+                                 @@@             @@@          
+                                @@@@            @@@@          
+                              @@@@@            @@@@           
+                           @@@@                  @@@@         
+                         @@@@@@@@@                @@@@        
+                              @@@@@@@@              @@@       
+                                 @@@@@     @@@@@@@@@@@@@      
+                              @@@@@ @@@   @@@@                
+                            @@@@@    @@@@@@@                  
+                          @@@@@      @@@@@                    
+                        @@@@          @@@                     
+                      @@@@                                    
+                    @@@@                                      
+                  @@@@                                        
+                @@@@                                          
+              @@@@                                            
+           @@@@@                                              
+         @@@@@                                                
+        @@@@                                                                                                                            
+                                        """
+    print(ascii_image4)
     power_roll = random.choice(["Fire Magic", "Freeze Time", "Super Hearing"])
-    m_combat_strength += min(6, m_combat_strength + monster_powers[power_roll])
-    print("    |    The monster's combat strength is now " + str(m_combat_strength) + " using the " + power_roll + " magic power")
 
-    num_dream_lvls = -1
-    while num_dream_lvls < 0 or num_dream_lvls > 3:
+    # Increase the monster’s combat strength by its power
+    m_combat_strength += min(6, m_combat_strength + monster_powers[power_roll])
+    print("    |    The monster's combat strength is now " + str(
+        m_combat_strength) + " using the " + power_roll + " magic power")
+
+    # Inception dream
+    num_dream_lvls = -1 # Initialize the number of dream levels
+    while (num_dream_lvls < 0 or num_dream_lvls > 3):
+        # Call Recursive function
         print("    |", end="    ")
         num_dream_lvls = input("How many dream levels do you want to go down? (Enter a number 0-3)")
-        if num_dream_lvls == "":
+        # If the value entered was not an integer, set the number of dream levels to -1 and loop again 
+        if ((num_dream_lvls == "")):
             num_dream_lvls = -1
             print("Number entered must be a whole number between 0-3 inclusive, try again")
+    
         else:
             num_dream_lvls = int(num_dream_lvls)
-            if num_dream_lvls < 0 or num_dream_lvls > 3:
+
+            if ((num_dream_lvls < 0) or (num_dream_lvls > 3)):
                 num_dream_lvls = -1
                 print("Number entered must be a whole number between 0-3 inclusive, try again")
-            elif num_dream_lvls != 0:
+            elif (not num_dream_lvls == 0):
                 health_points -= 1
-                health_points = max(1, health_points)
                 crazy_level = functions.inception_dream(num_dream_lvls)
                 combat_strength += crazy_level
                 print("combat strength: " + str(combat_strength))
@@ -130,47 +203,107 @@ if not input_invalid:
         print("num_dream_lvls: ", num_dream_lvls)
 
     # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
-    # ---------------------------NEZIHE: LEVEL UP-------------------------------------------
+    # ---------------------------NEZ: LEVEL UP-------------------------------------------
+    # ---------------------------PENNY: CRAZY SCIENTIST----------------------------------
 
-    # Load previous game state to determine level-up
-    print("    |    Loading from saved file ...")
-    game_result = functions.load_game()
-    monsters_killed = 0
+    # Crazy Scientist Feature
+    print("    ------------------------------------------------------------------")
+    print("    |    The Hero comes across a door that leads into a Science Lab")
+    input("    |    Is the door unlocked? Roll the dice to find out! (Press enter)")
+    door_roll = random.choice(big_dice_options)
+    door_unlocked = False
+    mood = "bad_mood"
 
-    if isinstance(game_result, str) and "gained" in game_result:
-        try:
-            monsters_killed = int(game_result.split("gained")[1].strip().split()[0])
-        except (IndexError, ValueError):
-            monsters_killed = 0
+    if door_roll in range (1, 17):
+        door_unlocked = True
+        print("    |    The door is unlocked")
+        print("    |    You go inside to see a Scientist working")
+        input("    |    Roll the dice to find out if the Scientist is in a good or bad mood. (Press enter)")
 
-    hero_level = monsters_killed // 3
-    print("    |    Based on your game history, your hero level is:", hero_level)
+        mood_roll = random.choice(small_dice_options)
+        print("    |    ")
 
-    if hero_level >= 3:
-        print("    |    You are facing an ELITE monster due to your level.")
-        m_health_points += 10
-        m_combat_strength = min(6, m_combat_strength + 2)
-    elif hero_level >= 1:
-        print("    |    You are facing a STRONGER monster due to your level.")
-        m_health_points += 5
-        m_combat_strength = min(6, m_combat_strength + 1)
+        if mood_roll % 2 == 0:
+            mood = "good_mood"
+            print("    |    Great news, the Scientist is in a good mood today and will attempt an experiment "
+                  "to help you fight the monster.")
+        elif mood_roll % 2 == 1:
+            mood = "bad_mood"
+            print("    |    Oh no, the Scientist is angry to have been disturbed!")
+            print("    |    Now they are in a bad mood and will attempt an experiment to help the monster!")
+
+        # This code should only execute if the door is unlocked
+        # Define the possible outcomes of the cloning experiment
+        cloning_experiments_and_outcomes = {
+            'good_mood': ['The hero have been successfully cloned!',
+                          'The attempt to clone the hero failed!',
+                          'The hero has been cloned, but it was a very strenuous and the hero is now weakened.'
+                          ],
+            'bad_mood': ['Oh no! The monster has been successfully cloned!',
+                         'What a relief, the attempt to clone the monster failed!',
+                         'Plot twist! The monster clone joins the hero to fight the original monster.'
+                         ]
+        }
+
+        # The possible cloning outcomes is based on mood
+        possible_cloning_outcomes = [outcome for key, outcomes in cloning_experiments_and_outcomes.items()
+                                     if key == mood for outcome in outcomes]
+
+        print(f"    |    The possible cloning outcomes are: {possible_cloning_outcomes}")
+        input(
+            "    |    Continue to find out what happens when the Scientist attempts their experiment. (Press enter)")
+
+        # Roll the dice to select one of the possible cloning outcomes
+        outcome_roll = random.choice(possible_cloning_outcomes)
+        print("    |    The outcome of the experiment is:")
+        print(f"    |    {outcome_roll}")
+        if outcome_roll == 'The hero have been successfully cloned!':
+            print("    |    As a result the Hero's Combat Strength and Health Points have doubled.")
+            health_points *= 2
+            combat_strength *= 2
+        elif outcome_roll == 'The attempt to clone the hero failed!':
+            print("    |    No change is made to the Hero's Combat Strength and Health Points.")
+        elif outcome_roll == 'The hero has been cloned, but it was a very strenuous and the hero is now weakened.':
+            print("    |    The Hero's Combat Strength is reduced to half but the Health Points have doubled.")
+            health_points *= 2
+            combat_strength //= 2
+        elif outcome_roll == 'Oh no! The monster has been successfully cloned!':
+            print("    |    As a result the Monster's Combat Strength and Health Points have doubled.")
+            m_health_points *= 2
+            m_combat_strength *= 2
+        elif outcome_roll == 'What a relief, the attempt to clone the monster failed!':
+            print("    |    No change is made to the Monster's Combat Strength and Health Points.")
+        elif outcome_roll == 'Plot twist! The monster clone joins the hero to fight the original monster.':
+            print("    |    As a result the Monster's Combat Strength and Health Points have been reduced to half.")
+            m_health_points //= 2
+            m_combat_strength //= 2
+        print("    |    You escape from the Science Lab before something even crazier happens!")
     else:
-        print("    |    You are facing a REGULAR monster.")
+        print("    |    The door is locked and you cannot enter.")
 
-    # ---------------- Safe Type Enforcement ----------------
-    health_points = max(1, int(health_points))
-    combat_strength = max(1, int(combat_strength))
-    m_health_points = max(1, int(m_health_points))
-    m_combat_strength = max(1, int(m_combat_strength))
+    # Print out the updated combat strength and health points for the Hero and Monster
+    print("")
+    print("    |    The Hero and Monster Combat Strength and Health Points are set as follows:")
+    print(f"Hero's Health Points: {health_points}")
+    print(f"Hero's Combat Strength: {combat_strength}")
+    print(f"Monster's Health Points: {m_health_points}")
+    print(f"Monster's Combat Strength: {m_combat_strength}")
+    print("")
+    print("    ------------------------------------------------------------------")
 
-    # Fight Loop
+    # ---------------------------JAMES: DRAGON'S DEN-------------------------------------
+
+    # Fight Sequence
+    # Loop while the monster and the player are alive. Call fight sequence functions
     print("    ------------------------------------------------------------------")
     print("    |    You meet the monster. FIGHT!!")
     while m_health_points > 0 and health_points > 0:
+        # Fight Sequence
         print("    |", end="    ")
+
+        # Determine who goes first
         input("Roll to see who strikes first (Press Enter)")
         attack_roll = random.choice(small_dice_options)
-
         if not (attack_roll % 2 == 0):
             print("    |", end="    ")
             input("You strike (Press enter)")
@@ -196,18 +329,23 @@ if not input_invalid:
                 print("    |", end="    ")
                 print("------------------------------------------------------------------")
                 input("The hero strikes!! (Press enter)")
-                m_health_points = functions.hero_attacks(combat_strength, m_health_points)
+                m_health_points = (functions.hero_attacks(combat_strength, m_health_points))
                 if m_health_points == 0:
                     num_stars = 3
                 else:
                     num_stars = 2
 
-    winner = "Hero" if m_health_points <= 0 else "Monster"
+    if(m_health_points <= 0):
+        winner = "Hero"
+    else:
+        winner = "Monster"
 
+    # Final Score Display
     tries = 0
     input_invalid = True
     while input_invalid and tries in range(5):
         print("    |", end="    ")
+
         hero_name = input("Enter your Hero's name (in two words)")
         name = hero_name.split()
         if len(name) != 2:
@@ -225,4 +363,7 @@ if not input_invalid:
     if not input_invalid:
         stars_display = "*" * num_stars
         print("    |    Hero " + short_name + " gets <" + stars_display + "> stars")
+
         functions.save_game(winner, hero_name=short_name, num_stars=num_stars)
+
+
