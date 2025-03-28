@@ -173,6 +173,12 @@ if not input_invalid:
     print("    |    Loading from saved file ...")
     monsters_killed = functions.load_game()
 
+    if isinstance(monsters_killed, str):
+        try:
+            monsters_killed = int(monsters_killed)
+        except ValueError:
+            monsters_killed = 0
+
     hero_level = monsters_killed // 3
     print("    |    Based on your game history, your hero level is:", hero_level)
 
