@@ -212,6 +212,7 @@ if not input_invalid:
                 print("combat strength: " + str(combat_strength))
                 print("health points: " + str(health_points))
         print("num_dream_lvls: ", num_dream_lvls)
+        print("m_health_points: ", str(m_health_points))
 
     # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
     # ---------------------------NEZ: LEVEL UP-------------------------------------------
@@ -262,11 +263,14 @@ if not input_invalid:
                     print(f"     |  {dragon['name']} shields you from damage!")
                     health_points += 10
                     print("health points: " + str(health_points))
+                    break  # Stop after the first Shield dragon acts
+
                 elif 10 < health_points < 20 and health_points % 2 != 0 and dragon["role"] == "Attack":
                     print(f" {dragon['name']} joins the attack!")
                     print(f"     |  {dragon['name']} attacks causing damage!")
                     m_health_points -= 5
                     print("monster health points: " + str(m_health_points))
+                    break  # Stop after the first Attack dragon acts
 
             # Hero attacks the monster
             m_health_points = functions.hero_attacks(combat_strength, m_health_points)
@@ -301,11 +305,14 @@ if not input_invalid:
                     print(f"     |  {dragon['name']} shields you from damage!")
                     health_points += 10
                     print("health points: " + str(health_points))
+                    break  # Stop after the first Shield dragon acts
+
                 elif 10 < health_points < 20 and health_points % 2 != 0 and dragon["role"] == "Attack":
                     print(f" {dragon['name']} joins the attack!")
                     print(f"     |  {dragon['name']} attacks causing damage!")
                     m_health_points -= 5
                     print("monster health points: " + str(m_health_points))
+                    break  # Stop after the first Attack dragon acts
 
             # Monster attacks the hero
             if wizard_protection:
