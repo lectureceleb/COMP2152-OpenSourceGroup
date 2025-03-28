@@ -189,7 +189,7 @@ if not input_invalid:
         m_combat_strength) + " using the " + power_roll + " magic power")
 
     # Inception dream
-    num_dream_lvls = -1 # Initialize the number of dream levels
+    num_dream_lvls = -1  # Initialize the number of dream levels
     while (num_dream_lvls < 0 or num_dream_lvls > 3):
         # Call Recursive function
         print("    |", end="    ")
@@ -198,7 +198,7 @@ if not input_invalid:
         if ((num_dream_lvls == "")):
             num_dream_lvls = -1
             print("Number entered must be a whole number between 0-3 inclusive, try again")
-    
+
         else:
             num_dream_lvls = int(num_dream_lvls)
 
@@ -215,8 +215,264 @@ if not input_invalid:
         print("m_health_points: ", str(m_health_points))
 
     # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
+
+    # Number value assigned to each mode (used for value assignments)
+    normal = 0
+    extreme = 1
+
+    # Weather condition options
+    conditions = [
+        {"name": "sunny", "term": "sun", "mode": normal, "affected": "hero", "effect": "up"},
+        {"name": "windy", "term": "wind", "mode": normal, "affected": "hero", "effect": "down"},
+        {"name": "rainy", "term": "rain", "mode": normal, "affected": "monster", "effect": "up"},
+        {"name": "snowy", "term": "snow", "mode": normal, "affected": "monster", "effect": "down"},
+        {"name": "foggy", "term": "fog", "mode": normal, "affected": "none", "effect": "none"},
+        {"name": "heat wave", "term": "scorching heat", "mode": extreme, "affected": "both", "effect": "down"},
+        {"name": "cursed", "term": "curse", "mode": extreme, "affected": "hero", "effect": "down"}]
+
+    # Potential stats to be changed based on mode
+    stat_statements = ["health points", "strength and health"]
+
+    # Modifiers that stats will be changed by
+    h_modifier = 2
+    m_modifier = 2
+
+    # User interaction begins:
+    # React to user's dream level choice to make feature flow with the overall game
+    print("    ------------------------------------------------------------------")
+    if num_dream_lvls > 0:
+        print("    |    You have woken up from your dream!")
+    else:
+        print("    |    Who needs sleep, anyway?")
+    print("    |    Would you like to play on normal or extreme mode?", end=" ")
+
+    # Validate user input to ensure either 'normal' or 'extreme' is chosen
+    mode = ""
+    valid_entry = False
+    while not valid_entry:
+        try:
+            mode = input().lower()
+            if not mode == "normal" and not mode == "extreme":
+                raise ValueError("Please enter either 'normal' or 'extreme' to proceed:")
+        except ValueError as ve:
+            print(f"    |    {ve}", end=" ")
+        else:
+            valid_entry = True
+    print("    |    ")
+
+    # Set values based on the mode chosen
+    if mode == "extreme":
+        extreme = True
+        stat = stat_statements[extreme]
+
+        # Extract extreme conditions (mode = 2)
+        short_list = [c for c in conditions if c["mode"] == extreme]
+        print(f"    |    You are in EXTREME mode!  You might regret this...")
+    else:
+        extreme = False
+        stat = stat_statements[normal]
+
+        # Extract normal conditions (mode = 1)
+        short_list = [c for c in conditions if c["mode"] == normal]
+        print(f"    |    You are in normal mode.  A little boring, don't you think...?")
+
+    # Choose a random weather condition form the short list
+    weather_roll = random.choice(range(len(short_list)))
+    weather = short_list[weather_roll]
+
+    # Cursed will have a unique message; do not mention weather if so
+    if not weather["name"] == "cursed":
+        print(f"    |    ")
+        print(f"    |    This wasn't in the weather report...")
+        print(f"    |    As you move forward, you notice it is now a {weather["name"]} day.")
+        print(f"    |    ")
+
+    # The weather effects alter the hero and/or monster
+    if extreme:
+        if weather["affected"] == "both":
+            print(f"    |    The {weather["term"]} is becoming unbearable...  Your {stat} have decreased.")
+            # If hero's health is already at 1, do not make a change
+            if health_points == 1:
+                print("Your health is already dangerously low.  Be careful!")
+            else:
+                # If hero's health is above 1, ensure the lowest hero health can fall to is 1
+                print(f"    |    Your {stat} went down from {health_points} to {max(1, health_points // 2)} and"
+                      f" {combat_strength} to {max(1, combat_strength // 2)}!")
+                health_points = max(1, (health_points // 2))
+                combat_strength = max(1, combat_strength // 2)
+
+            print(f"    |    \"Luckily\" for you, the monster is struggling as well.")
+            # If monster's health is already 1, do not make a change
+            if m_health_points == 1:
+                print(f"The monster's health is already dangerously low.  The odds are in your favour!")
+            else:
+                # If monster's health is above 1, ensure the lowest monster health can go is 1 hp
+                print(
+                    f"    |    The monster's {stat} went down from {m_health_points} to {max(1, m_health_points // 2)}"
+                    f" and {m_combat_strength} to {max(1, m_combat_strength // 2)}!")
+                m_health_points = max(1, m_health_points // 2)
+                m_combat_strength = max(1, m_combat_strength // 2)
+        elif weather["affected"] == "hero":
+
+            gnome = """
+        ⠀⠀⠀⠀⠀⠀⠀⡴⠒⠒⠒⠒⠤⢀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠙⢄⠀⠀⠀⠀⠀⠑⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢣⠀⠀⠀⠀⠀⠀⢂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⠀⢀⠎⠀⠀⠀⠀⠀⠀⠀⢂⠀⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⠀⢠⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⢢⠀⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⠀⠀⢀⠞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⢦⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠀⠀⠀⡠⠔⠁⠤⠤⠄⠒⠀⠀⣉⣁⣀⣀⡀⠀⠀⠁⠢⠀⠀⠀⠀⠀
+        ⠀⠀⠀⢸⠤⠄⣀⣤⠔⣦⣮⣍⠀⠀⠀⢠⣶⢬⡑⡶⡒⡺⠀⠀⠀⠀⠀
+        ⠀⠀⠀⢇⢣⡰⢟⡇⠀⠉⢩⣄⠀⠀⠀⠀⣤⡈⠁⠃⢣⢸⠆⠀⠀⠀⠀
+        ⠀⠀⠀⠈⣧⣿⠟⠆⠀⠀⠙⠟⠁⡄⠒⢬⡿⠋⠀⠸⠸⠟⠀⠀⠀⠀⠀
+        ⠀⠀⠀⡠⠿⠵⡀⢆⠀⠀⢀⣀⣼⡶⠤⢶⣇⣀⠀⠀⠆⡇⠀⠀⠀⠀⠀
+        ⠀⢰⠁⠀⠀⠀⠀⢱⠈⠛⠿⢛⡡⣔⣒⡠⢙⠵⢬⠉⢁⡇⠀⠀⠀⠀⠀
+        ⠀⢸⣢⡀⠀⢀⣀⠜⡹⠀⣨⠃⠀⠀⢃⠀⠀⠩⡀⠀⠁⡏⢆⠀⠀⠀⠀
+        ⣔⠏⠀⠀⠀⣀⢇⢰⠀⠎⣧⠀⠀⠀⢸⡄⠀⠀⢱⠀⢀⡷⣾⡶⠤⡀⠀
+        ⡏⡀⠀⡉⠁⢀⢼⢆⢸⠀⣿⠀⠀⠀⡘⠀⢸⠀⢸⠀⣸⡁⢳⠜⣀⠜⠆
+        ⠡⡑⡄⠤⠀⠤⡎⠀⠙⡄⠈⠀⠀⠰⠁⠀⡘⠀⠀⡤⠃⡔⠘⠀⡼⠒⡇
+        ⠀⠈⢩⠉⢐⠚⠁⠀⠀⠈⠢⡄⠀⠀⠀⠰⠁⠀⡎⠀⡰⠑⠢⡸⣏⡾⠁
+        ⠀⠀⡆⠀⠎⠸⣀⠀⠀⠀⠀⠀⠢⢄⠀⡁⠜⣉⠠⠚⡄⠀⠀⠈⠉⠀⠀
+        ⠀⢰⠁⡘⠀⡏⠀⠈⠉⠁⠀⠀⢒⠒⠋⠈⠉⢀⠠⡊⠀⠀⠀⠀⠀⠀⠀
+        ⠀⠸⢠⠁⢠⠁⠀⠉⠁⠀⠒⠒⠋⠐⠂⠀⠉⠀⠀⠓⠄⡀⠀⠀⠀⠀⠀
+        ⠀⢸⠈⡔⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠄⠀⠀⠀
+        ⠀⢸⢼⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⢄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠈⡄⠀⠀
+        ⠀⠘⢬⣄⡀⠀⠀⠀⠀⠀⢀⠮⠓⠂⠄⣑⠂⠤⠀⠀⠀⠀⠠⢴⠃⠀⠀
+        ⠀⠀⠀⠑⠠⠥⠤⠤⠤⠭⠚⠁⠀⠀⠀⠀⠈⠉⠁⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+            """
+            print(gnome)
+
+            print(
+                f"    |    A random gnome has appeared and cast a spell!  You hear it run and laugh as you start seeing double.")
+            # If hero's health is already 1, do not make a change
+            if health_points == 1:
+                print(f"Your health is already dangerously low.  Be careful!")
+            else:
+                # If hero's health is above 1, ensure the lowest hero health can fall to is 1
+                print(f"    |    Your {stat} went down from {health_points} to {max(1, health_points // 2)}"
+                      f" and {combat_strength} to {max(1, combat_strength // 2)}!")
+                health_points = max(1, health_points // 2)
+                combat_strength = max(1, combat_strength // 2)
+            print(f"    |    Suspiciously, the monster is unaffected...")
+    else:
+        if weather["affected"] == "hero" and weather["effect"] == "up":
+            print(f"    |    The {weather["term"]} seems to be energizing you...  Your {stat} have increased.")
+            print(f"    |    Your {stat} went up from {health_points} to {health_points + h_modifier}!")
+            health_points += h_modifier
+        elif weather["affected"] == "hero" and weather["effect"] == "down":
+            print(f"    |    The {weather["term"]} is making you feel uneasy...  Your {stat} have decreased.")
+            # If hero health is already 1, do not make a change
+            if health_points == 1:
+                print("Your health is already dangerously low.  Be careful!")
+            else:
+                # If hero's health is above 1, ensure the lowest hero health can fall to is 1
+                print(f"    |    Your {stat} went down from {health_points} to {max(1, (health_points - h_modifier))}!")
+                health_points = max(1, (health_points - h_modifier))
+        elif weather["affected"] == "monster" and weather["effect"] == "up":
+            print(f"    |    The monster appears to be enjoying the {weather["term"]}.  Its {stat} have increased.")
+            print(f"    |    The monster's {stat} went up from {m_health_points} to {m_health_points + m_modifier}!")
+            m_health_points += m_modifier
+        elif weather["affected"] == "monster" and weather["effect"] == "down":
+            print(f"    |    The monster appears to be reacting to the {weather["term"]}.  Its {stat} have decreased.")
+            # If monster's health is already 1, do not make a change
+            if m_health_points == 1:
+                print(f"    |    The monster's health is already at its lowest.  The odds are in your favour!")
+            else:
+                # If monster's health is above 1, ensure the lowest monster health can fall to is 1
+                print(
+                    f"    |    The monster's {stat} went down from {m_health_points} to {max(1, (m_health_points - m_modifier))}!")
+                m_health_points = max(1, (m_health_points - m_modifier))
+        elif weather["affected"] == "none":
+            print("    |    Nothing seems to have happened...")
+
     # ---------------------------NEZ: LEVEL UP-------------------------------------------
     # ---------------------------PENNY: CRAZY SCIENTIST----------------------------------
+
+    # Crazy Scientist Feature
+    print("    ------------------------------------------------------------------")
+    print("    |    The Hero comes across a door that leads into a Science Lab")
+    input("    |    Is the door unlocked? Roll the dice to find out! (Press enter)")
+    door_roll = random.choice(big_dice_options)
+    door_unlocked = False
+    mood = "bad_mood"
+
+    if door_roll in range (1, 17):
+        door_unlocked = True
+        print("    |    The door is unlocked")
+        print("    |    You go inside to see a Scientist working")
+        input("    |    Roll the dice to find out if the Scientist is in a good or bad mood. (Press enter)")
+
+        mood_roll = random.choice(small_dice_options)
+        print("    |    ")
+
+        if mood_roll % 2 == 0:
+            mood = "good_mood"
+            print("    |    Great news, the Scientist is in a good mood today and will attempt an experiment "
+                  "to help you fight the monster.")
+        elif mood_roll % 2 == 1:
+            mood = "bad_mood"
+            print("    |    Oh no, the Scientist is angry to have been disturbed!")
+            print("    |    Now they are in a bad mood and will attempt an experiment to help the monster!")
+
+        # This code should only execute if the door is unlocked
+        # Define the possible outcomes of the cloning experiment
+        cloning_experiments_and_outcomes = {
+            'good_mood': ['The hero have been successfully cloned!',
+                          'The attempt to clone the hero failed!',
+                          'The hero has been cloned, but it was a very strenuous and the hero is now weakened.'
+                          ],
+            'bad_mood': ['Oh no! The monster has been successfully cloned!',
+                         'What a relief, the attempt to clone the monster failed!',
+                         'Plot twist! The monster clone joins the hero to fight the original monster.'
+                         ]
+        }
+
+        # The possible cloning outcomes is based on mood
+        possible_cloning_outcomes = [outcome for key, outcomes in cloning_experiments_and_outcomes.items()
+                                     if key == mood for outcome in outcomes]
+
+        print(f"    |    The possible cloning outcomes are: {possible_cloning_outcomes}")
+        input(
+            "    |    Continue to find out what happens when the Scientist attempts their experiment. (Press enter)")
+
+        # Roll the dice to select one of the possible cloning outcomes
+        outcome_roll = random.choice(possible_cloning_outcomes)
+        print("    |    The outcome of the experiment is:")
+        print(f"    |    {outcome_roll}")
+        if outcome_roll == 'The hero have been successfully cloned!':
+            print("    |    As a result the Hero's Combat Strength and Health Points have doubled.")
+            health_points *= 2
+            combat_strength *= 2
+        elif outcome_roll == 'The attempt to clone the hero failed!':
+            print("    |    No change is made to the Hero's Combat Strength and Health Points.")
+        elif outcome_roll == 'The hero has been cloned, but it was a very strenuous and the hero is now weakened.':
+            print("    |    The Hero's Combat Strength is reduced to half but the Health Points have doubled.")
+            health_points *= 2
+            combat_strength //= 2
+        elif outcome_roll == 'Oh no! The monster has been successfully cloned!':
+            print("    |    As a result the Monster's Combat Strength and Health Points have doubled.")
+            m_health_points *= 2
+            m_combat_strength *= 2
+        elif outcome_roll == 'What a relief, the attempt to clone the monster failed!':
+            print("    |    No change is made to the Monster's Combat Strength and Health Points.")
+        elif outcome_roll == 'Plot twist! The monster clone joins the hero to fight the original monster.':
+            print("    |    As a result the Monster's Combat Strength and Health Points have been reduced to half.")
+            m_health_points //= 2
+            m_combat_strength //= 2
+        print("    |    You escape from the Science Lab before something even crazier happens!")
+    else:
+        print("    |    The door is locked and you cannot enter.")
+
+    # Print out the updated combat strength and health points for the Hero and Monster
+    print("")
+    print("    |    The Hero and Monster Combat Strength and Health Points are set as follows:")
+    print(f"Hero's Health Points: {health_points}")
+    print(f"Hero's Combat Strength: {combat_strength}")
+    print(f"Monster's Health Points: {m_health_points}")
+    print(f"Monster's Combat Strength: {m_combat_strength}")
+    print("")
+    print("    ------------------------------------------------------------------")
+
     # ---------------------------JAMES: DRAGON'S DEN-------------------------------------
 
     print("The hero has selected these dragons from the Dragon's Den:", [dragon['name'] for dragon in hero_dragons])
@@ -337,7 +593,7 @@ if not input_invalid:
                     num_stars = 2
 
     # Determine the winner
-    if m_health_points <= 0:
+    if (m_health_points <= 0):
         winner = "Hero"
     else:
         winner = "Monster"
