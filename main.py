@@ -193,7 +193,7 @@ if not input_invalid:
     else:
         print("    |    You are facing a REGULAR monster.")
 
-    # ---------------- Safe Type Enforcement ----------------
+    # Safe Type Enforcement
     health_points = max(1, int(health_points))
     combat_strength = max(1, int(combat_strength))
     m_health_points = max(1, int(m_health_points))
