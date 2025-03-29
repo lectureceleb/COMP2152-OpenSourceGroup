@@ -24,10 +24,10 @@ monster_powers = {
 
 # Define the available dragons as dictionaries
 dragons_den = [
-    {"name": "Blaze", "element": "Fire", "role": "Attack"},
-    {"name": "Smaug", "element": "Earth", "role": "Shield"},
-    {"name": "Drogon", "element": "Air", "role": "Attack"},
-    {"name": "Falkor", "element": "Water", "role": "Shield"}
+    {'name': "Blaze", "element": "Fire", "role": "Attack"},
+    {'name': "Smaug", "element": "Earth", "role": "Shield"},
+    {'name': "Drogon", "element": "Air", "role": "Attack"},
+    {'name': "Falkor", "element": "Water", "role": "Shield"}
 ]
 
 # Randomly select up to 3 dragons using list comprehension
@@ -213,6 +213,35 @@ if not input_invalid:
                 print("Hero's Health Points: " + str(health_points))
         print("Dream Levels: ", num_dream_lvls)
         print("Monster's Combat Strength: ", str(m_health_points))
+        # ---------------------------NEZIHE: LEVEL UP-------------------------------------------
+    print("    |    Loading from saved file ...")
+    monsters_killed = functions.load_game()
+
+    if isinstance(monsters_killed, str):
+        try:
+            monsters_killed = int(monsters_killed)
+        except ValueError:
+            monsters_killed = 0
+
+    hero_level = monsters_killed // 3
+    print("    |    Based on your game history, your hero level is:", hero_level)
+
+    if hero_level >= 3:
+        print("    |    You are facing an ELITE monster due to your level.")
+        m_health_points += 10
+        m_combat_strength = min(6, m_combat_strength + 2)
+    elif hero_level >= 1:
+        print("    |    You are facing a STRONGER monster due to your level.")
+        m_health_points += 5
+        m_combat_strength = min(6, m_combat_strength + 1)
+    else:
+        print("    |    You are facing a REGULAR monster.")
+
+    # Safe Type Enforcement
+    health_points = max(1, int(health_points))
+    combat_strength = max(1, int(combat_strength))
+    m_health_points = max(1, int(m_health_points))
+    m_combat_strength = max(1, int(m_combat_strength))
 
     # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
 
@@ -222,13 +251,13 @@ if not input_invalid:
 
     # Weather condition options
     conditions = [
-        {"name": "sunny", "term": "sun", "mode": normal, "affected": "hero", "effect": "up"},
-        {"name": "windy", "term": "wind", "mode": normal, "affected": "hero", "effect": "down"},
-        {"name": "rainy", "term": "rain", "mode": normal, "affected": "monster", "effect": "up"},
-        {"name": "snowy", "term": "snow", "mode": normal, "affected": "monster", "effect": "down"},
-        {"name": "foggy", "term": "fog", "mode": normal, "affected": "none", "effect": "none"},
-        {"name": "heat wave", "term": "scorching heat", "mode": extreme, "affected": "both", "effect": "down"},
-        {"name": "cursed", "term": "curse", "mode": extreme, "affected": "hero", "effect": "down"}]
+        {'name': "sunny", 'term': "sun", "mode": normal, "affected": "hero", "effect": "up"},
+        {'name': "windy", 'term': "wind", "mode": normal, "affected": "hero", "effect": "down"},
+        {'name': "rainy", 'term': "rain", "mode": normal, "affected": "monster", "effect": "up"},
+        {'name': "snowy", 'term': "snow", "mode": normal, "affected": "monster", "effect": "down"},
+        {'name': "foggy", 'term': "fog", "mode": normal, "affected": "none", "effect": "none"},
+        {'name': "heat wave", 'term': "scorching heat", "mode": extreme, "affected": "both", "effect": "down"},
+        {'name': "cursed", 'term': "curse", "mode": extreme, "affected": "hero", "effect": "down"}]
 
     # Potential stats to be changed based on mode
     stat_statements = ["health points", "strength and health"]
@@ -281,16 +310,16 @@ if not input_invalid:
     weather = short_list[weather_roll]
 
     # Cursed will have a unique message; do not mention weather if so
-    if not weather["name"] == "cursed":
+    if not weather['name'] == "cursed":
         print(f"    |    ")
         print(f"    |    This wasn't in the weather report...")
-        print(f"    |    As you move forward, you notice it is now a {weather["name"]} day.")
+        print(f"    |    As you move forward, you notice it is now a {weather['name']} day.")
         print(f"    |    ")
 
     # The weather effects alter the hero and/or monster
     if extreme:
         if weather["affected"] == "both":
-            print(f"    |    The {weather["term"]} is becoming unbearable...  Your {stat} have decreased.")
+            print(f"    |    The {weather['term']} is becoming unbearable...  Your {stat} have decreased.")
             # If hero's health is already at 1, do not make a change
             if health_points == 1:
                 print("Your health is already dangerously low.  Be careful!")
@@ -356,11 +385,11 @@ if not input_invalid:
             print(f"    |    Suspiciously, the monster is unaffected...")
     else:
         if weather["affected"] == "hero" and weather["effect"] == "up":
-            print(f"    |    The {weather["term"]} seems to be energizing you...  Your {stat} have increased.")
+            print(f"    |    The {weather['term']} seems to be energizing you...  Your {stat} have increased.")
             print(f"    |    Your {stat} went up from {health_points} to {health_points + h_modifier}!")
             health_points += h_modifier
         elif weather["affected"] == "hero" and weather["effect"] == "down":
-            print(f"    |    The {weather["term"]} is making you feel uneasy...  Your {stat} have decreased.")
+            print(f"    |    The {weather['term']} is making you feel uneasy...  Your {stat} have decreased.")
             # If hero health is already 1, do not make a change
             if health_points == 1:
                 print("Your health is already dangerously low.  Be careful!")
@@ -369,11 +398,11 @@ if not input_invalid:
                 print(f"    |    Your {stat} went down from {health_points} to {max(1, (health_points - h_modifier))}!")
                 health_points = max(1, (health_points - h_modifier))
         elif weather["affected"] == "monster" and weather["effect"] == "up":
-            print(f"    |    The monster appears to be enjoying the {weather["term"]}.  Its {stat} have increased.")
+            print(f"    |    The monster appears to be enjoying the {weather['term']}.  Its {stat} have increased.")
             print(f"    |    The monster's {stat} went up from {m_health_points} to {m_health_points + m_modifier}!")
             m_health_points += m_modifier
         elif weather["affected"] == "monster" and weather["effect"] == "down":
-            print(f"    |    The monster appears to be reacting to the {weather["term"]}.  Its {stat} have decreased.")
+            print(f"    |    The monster appears to be reacting to the {weather['term']}.  Its {stat} have decreased.")
             # If monster's health is already 1, do not make a change
             if m_health_points == 1:
                 print(f"    |    The monster's health is already at its lowest.  The odds are in your favour!")
@@ -385,7 +414,6 @@ if not input_invalid:
         elif weather["affected"] == "none":
             print("    |    Nothing seems to have happened...")
 
-    # ---------------------------NEZ: LEVEL UP-------------------------------------------
     # ---------------------------PENNY: CRAZY SCIENTIST----------------------------------
 
     # Crazy Scientist Feature
