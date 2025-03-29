@@ -586,23 +586,23 @@ if not input_invalid:
 
             # Check if a dragon enters the battle (Shield or Attack)
             for dragon in hero_dragons:
-                # if health_points < 5 and dragon ["role"] == "Shield":
-                if health_points < 10 and health_points % 2 == 0 and dragon["role"] == "Shield":
-                    print(f" {dragon['name']} will shield you from the monster's attack!")
-                    print(f"     |  {dragon['name']} shields you from damage!")
-                    health_points += 10
-                    print("health points: " + str(health_points))
-                    break  # Stop after the first Shield dragon acts
+                if health_points < 10 and health_points % 2 == 0:  # First level: Health check for Shield
+                    if dragon["role"] == "Shield":  # Second level: Role check
+                        print(f" {dragon['name']} will shield you from the monster's attack!")
+                        print(f"     |  {dragon['name']} shields you from damage!")
+                        health_points += 10
+                        print("health points: " + str(health_points))
+                        break  # Stop after the first Shield dragon acts
 
-                elif 10 < health_points < 20 and health_points % 2 != 0 and dragon["role"] == "Attack":
-                    print(f" {dragon['name']} joins the attack!")
-                    print(f"     |  {dragon['name']} attacks causing damage!")
-                    m_health_points -= 5
-                    print("monster health points: " + str(m_health_points))
-                    break  # Stop after the first Attack dragon acts
+                elif 10 < health_points < 20 and health_points % 2 != 0:  # First level: Health check for Attack
+                    if dragon["role"] == "Attack":  # Second level: Role check
+                        print(f" {dragon['name']} joins the attack!")
+                        print(f"     |  {dragon['name']} attacks causing damage!")
+                        m_health_points -= 5
+                        print("monster health points: " + str(m_health_points))
+                        break  # Stop after the first Attack dragon acts
 
-                else:
-                    # This handles the case where the dragon neither shields nor attacks
+                else:  # Handles the case where the dragon neither shields nor attacks
                     print(f"The monster strikes fear in {dragon['name']} who does not act this turn.")
 
             # Hero attacks the monster
@@ -633,24 +633,26 @@ if not input_invalid:
 
             # Check if a dragon should shield the hero
             for dragon in hero_dragons:
-                if health_points < 10 and health_points % 2 == 0 and dragon["role"] == "Shield":
-                    print(f" {dragon['name']} will shield you from the monster's attack!")
-                    print(f"     |  {dragon['name']} shields you from damage!")
-                    health_points += 10
-                    print("health points: " + str(health_points))
-                    break  # Stop after the first Shield dragon acts
+                if health_points < 20:  # First level: Check health range
+                    if health_points < 10 and health_points % 2 == 0:  # Second level: Check shield condition
+                        if dragon["role"] == "Shield":  # Third level: Check dragon's role
+                            print(f" {dragon['name']} will shield you from the monster's attack!")
+                            print(f"     |  {dragon['name']} shields you from damage!")
+                            health_points += 10
+                            print("health points: " + str(health_points))
+                            break  # Stop after the first Shield dragon acts
 
-                elif 10 < health_points < 20 and health_points % 2 != 0 and dragon["role"] == "Attack":
-                    print(f" {dragon['name']} joins the attack!")
-                    print(f"     |  {dragon['name']} attacks causing damage!")
-                    m_health_points -= 5
-                    print("monster health points: " + str(m_health_points))
-                    break  # Stop after the first Attack dragon acts
+                    elif 10 < health_points < 20 and health_points % 2 != 0:  # Second level: Check attack condition
+                        if dragon["role"] == "Attack":  # Third level: Check dragon's role
+                            print(f" {dragon['name']} joins the attack!")
+                            print(f"     |  {dragon['name']} attacks causing damage!")
+                            m_health_points -= 5
+                            print("monster health points: " + str(m_health_points))
+                            break  # Stop after the first Attack dragon acts
 
                 else:
                     # This handles the case where the dragon neither shields nor attacks
                     print(f"The monster strikes fear in {dragon['name']} who does not act this turn.")
-
 
             # Monster attacks the hero
             if wizard_protection:
