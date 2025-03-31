@@ -213,35 +213,80 @@ if not input_invalid:
                 print("Hero's Health Points: " + str(health_points))
         print("Dream Levels: ", num_dream_lvls)
         print("Monster's Combat Strength: ", str(m_health_points))
+
         # ---------------------------NEZIHE: LEVEL UP-------------------------------------------
-    print("    |    Loading from saved file ...")
-    monsters_killed = functions.load_game()
+        print("    |    Loading from saved file ...")
+        monsters_killed = functions.load_game()
 
-    if isinstance(monsters_killed, str):
-        try:
-            monsters_killed = int(monsters_killed)
-        except ValueError:
-            monsters_killed = 0
+        if isinstance(monsters_killed, str):
+            try:
+                monsters_killed = int(monsters_killed.split()[-2])
+            except (ValueError, IndexError):
+                monsters_killed = 0
 
-    hero_level = monsters_killed // 3
-    print("    |    Based on your game history, your hero level is:", hero_level)
+        hero_level = monsters_killed // 3
+        print("    |    Based on your game history, your hero level is:", hero_level)
 
-    if hero_level >= 3:
-        print("    |    You are facing an ELITE monster due to your level.")
-        m_health_points += 10
-        m_combat_strength = min(6, m_combat_strength + 2)
-    elif hero_level >= 1:
-        print("    |    You are facing a STRONGER monster due to your level.")
-        m_health_points += 5
-        m_combat_strength = min(6, m_combat_strength + 1)
-    else:
-        print("    |    You are facing a REGULAR monster.")
+        # Dynamic monster scaling with nested conditionals and health awareness
+        if hero_level >= 3:
+            print("    |    💀 You are facing an **ELITE** monster due to your level.")
+            if health_points < 15:
+                m_health_points += 5
+            else:
+                m_health_points += 10
+            m_combat_strength = min(6, m_combat_strength + 2)
+        elif hero_level >= 1:
+            print("    |    ⚔️ You are facing a **STRONGER** monster due to your level.")
+            m_health_points += 5
+            m_combat_strength = min(6, m_combat_strength + 1)
+        else:
+            print("    |    🐉 You are facing a **REGULAR** monster.")
 
-    # Safe Type Enforcement
-    health_points = max(1, int(health_points))
-    combat_strength = max(1, int(combat_strength))
-    m_health_points = max(1, int(m_health_points))
-    m_combat_strength = max(1, int(m_combat_strength))
+        # Mystic item detection
+        mystic_items = [item for item in belt if "Scroll" in item or "Rune" in item]
+        if mystic_items:
+            print("    |    🔮 A mysterious aura surrounds you as you carry:", mystic_items)
+            print("    |    You feel protected... or maybe cursed.")
+
+            # Trigger a mystic event
+            from random import choice
+
+            mystic_events = [
+                "⏳ Time slows down. You can dodge faster.",
+                "🌀 The rune glows and teleports you a few steps ahead.",
+                "✨ A scroll whispers secrets of an ancient power into your ear."
+            ]
+            chosen_event = choice(mystic_events)
+            mystic_art = """
+            ╔══════════════════════╗
+            ║  🌌 MYSTIC EVENT 🌌  ║
+            ╚══════════════════════╝
+            """
+            print(mystic_art)
+            print("    |    " + chosen_event)
+
+            # Bonus health for mystic blessing
+            health_points = min(20, health_points + 3)
+            print("    |    🧬 You gain +3 bonus health! New HP:", health_points)
+
+        # Rare loot bonus
+        rare_loot = [item for item in belt if len(item) > 10]
+        if rare_loot:
+            print("    |    💎 You found something rare and powerful:", rare_loot)
+            print("    |    It hums with hidden energy...")
+            num_stars += 1
+            print(f"    |    🌟 Rare Loot Bonus! Extra Star Earned. Total Stars: {num_stars}")
+
+        #  Risky item detection
+        risky_items = [item for item in belt if any(bad in item for bad in ["Poison", "Cursed", "Explosive"])]
+        if risky_items:
+            print("    |    ⚠️ Warning! Risky item(s) detected on your belt:", risky_items)
+
+        #  Safe Type Enforcement
+        health_points = max(1, int(health_points))
+        combat_strength = max(1, int(combat_strength))
+        m_health_points = max(1, int(m_health_points))
+        m_combat_strength = max(1, int(m_combat_strength))
 
     # ---------------------------OMAR: WEATHER EFFECTS-----------------------------------
 
