@@ -175,7 +175,7 @@ def save_game(winner, hero_name="", num_stars=0):
 def load_game():
     try:
         with open("save.txt", "r") as file:
-            print("    |    Loading from saved file ...")
+            #print("    |    Loading from saved file ...")
             lines = file.readlines()
             if lines:
                 last_line = lines[-1].strip()

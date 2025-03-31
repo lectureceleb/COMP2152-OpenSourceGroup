@@ -36,12 +36,18 @@ hero_dragons = random.sample(dragons_den, min(3, len(dragons_den)))
 # Define the number of stars to award the player
 num_stars = 0
 
+print("    |    Welcome, you are a true Hero!")
+print("    |    As the council of ImagiLand we would like to express our gratitude that you have come to save us.")
+print("    |    The terrible Monster have been terrorizing us for some time and many Heroes have attempted to defeat it...")
+print("    |    Get ready for a quest full of twists and turns as you embark on you mission.")
+print("    |    ")
 # Loop to get valid input for Hero and Monster's Combat Strength
 i = 0
 input_invalid = True
 
 while input_invalid and i in range(5):
     print("    ------------------------------------------------------------------")
+    print("    |    Please begin by selecting the Hero and Monster combat strength.")
     print("    |", end="    ")
     combat_strength = input("Enter your combat Strength (1-6): ")
     print("    |", end="    ")
@@ -71,6 +77,7 @@ if not input_invalid:
     m_combat_strength = int(m_combat_strength)
 
     # Roll for weapon
+    print("    |    As the next step you will randomly select the weapon to use in your quest.")
     print("    |", end="    ")
     input("Roll the dice for your weapon (Press enter)")
     ascii_image5 = """
@@ -89,14 +96,18 @@ if not input_invalid:
     # Limit the combat strength to 6
     combat_strength = min(6, (combat_strength + weapon_roll))
     print("    |    The hero\'s weapon is " + str(weapons[weapon_roll - 1]))
+    print("    |    ")
 
     # Call the function to adjust the combat strength
+    print("    |    Let's take a look at what happened on the last quest:")
     functions.adjust_combat_strength(combat_strength, m_combat_strength)
+    print("    |    Hmm, that's interesting..")
+    print("    |    ")
 
     # Weapon Roll Analysis
     print("    ------------------------------------------------------------------")
     print("    |", end="    ")
-    input("Analyze the Weapon roll (Press enter)")
+    input("Now let's Analyze the Weapon roll (Press enter)")
     print("    |", end="    ")
     if weapon_roll <= 2:
         print("--- You rolled a weak weapon, friend")
@@ -110,6 +121,7 @@ if not input_invalid:
         print("    |    --- Thank goodness you didn't roll the Fist...")
 
     # Roll for player health points
+    print("    |    Don't forget to determine how many health points the Hero and Monster has.")
     print("    |", end="    ")
     input("Roll the dice for your health points (Press enter)")
     health_points = random.choice(big_dice_options)
@@ -147,12 +159,14 @@ if not input_invalid:
     print("    |", end="    ")
     input("Analyze the roll (Press enter)")
     # Compare Player vs Monster's strength
+    print("    |    How does the Hero and Monster compare in strength?")
     print("    |    --- You are matched in strength: " + str(combat_strength == m_combat_strength))
 
     # Check the Player's overall strength and health
     print("    |    --- You have a strong player: " + str((combat_strength + health_points) >= 15))
 
     # Roll for the monster's power
+    print("    |    !!The Monster always has a magic power!! Find out what it is.")
     print("    |", end="    ")
     input("Roll for Monster's Magic Power (Press enter)")
     ascii_image4 = """                                                                       
@@ -189,6 +203,10 @@ if not input_invalid:
         m_combat_strength) + " using the " + power_roll + " magic power")
 
     # Inception dream
+    print("    |    ")
+    print("    ------------------------------------------------------------------")
+    print("    |    What is this?! Inception dream, will it harm or help you to enter deep into the dream realm?")
+    print("    |    Only those who tries will find out..")
     num_dream_lvls = -1  # Initialize the number of dream levels
     while (num_dream_lvls < 0 or num_dream_lvls > 3):
         # Call Recursive function
@@ -209,14 +227,29 @@ if not input_invalid:
                 health_points -= 1
                 crazy_level = functions.inception_dream(num_dream_lvls)
                 combat_strength += crazy_level
-                print("Hero's Combat Strength: " + str(combat_strength))
-                print("Hero's Health Points: " + str(health_points))
-        print("Dream Levels: ", num_dream_lvls)
-        print("Monster's Combat Strength: ", str(m_health_points))
+                print("    |    ")
+                print("    |    Hero's Combat Strength: " + str(combat_strength))
+                print("    |    Hero's Health Points: " + str(health_points))
+        print("    |    Dream Levels: ", num_dream_lvls)
+        print("    |    Monster's Combat Strength: ", str(m_health_points))
+
+        # React to user's dream level choice to make feature flow with the overall game
+        if num_dream_lvls > 0:
+            print("    |    ")
+            print("    |    You have woken up from your dream!")
+        else:
+            print("    |    ")
+            print("    |    Who needs sleep, anyway?")
 
         # ---------------------------NEZIHE: LEVEL UP-------------------------------------------
+        print("    ------------------------------------------------------------------")
+        print("    |    Time to determine what level of Hero you are!")
+        print("    |    How well have you done when attempting to kill the Monster in the past?")
+        print("    |    Lets take a look.")
         print("    |    Loading from saved file ...")
+        print("    |    ")
         monsters_killed = functions.load_game()
+        print("    |    ")
 
         if isinstance(monsters_killed, str):
             try:
@@ -312,12 +345,11 @@ if not input_invalid:
     m_modifier = 2
 
     # User interaction begins:
-    # React to user's dream level choice to make feature flow with the overall game
+    print("    |    ")
     print("    ------------------------------------------------------------------")
-    if num_dream_lvls > 0:
-        print("    |    You have woken up from your dream!")
-    else:
-        print("    |    Who needs sleep, anyway?")
+    print("    |    This is all too intense!")
+    print("    |    The Hero decides to delay the fight with the Monster, and see if they can find some help along the way..")
+    print("    |    But.. Venturing out on this path the Hero has a choice to make:")
     print("    |    Would you like to play on normal or extreme mode?", end=" ")
 
     # Validate user input to ensure either 'normal' or 'extreme' is chosen
@@ -367,7 +399,7 @@ if not input_invalid:
             print(f"    |    The {weather['term']} is becoming unbearable...  Your {stat} have decreased.")
             # If hero's health is already at 1, do not make a change
             if health_points == 1:
-                print("Your health is already dangerously low.  Be careful!")
+                print("    |    Your health is already dangerously low.  Be careful!")
             else:
                 # If hero's health is above 1, ensure the lowest hero health can fall to is 1
                 print(f"    |    Your {stat} went down from {health_points} to {max(1, health_points // 2)} and"
@@ -462,18 +494,21 @@ if not input_invalid:
     # ---------------------------PENNY: CRAZY SCIENTIST----------------------------------
 
     # Crazy Scientist Feature
+    print("    |    ")
     print("    ------------------------------------------------------------------")
-    print("    |    The Hero comes across a door that leads into a Science Lab")
+    print("    |    To escape the crazy weather, the Hero enters a building..")
+    print("    |    ..and comes across a door that leads into a Science Lab!")
     input("    |    Is the door unlocked? Roll the dice to find out! (Press enter)")
+    print("    |    ")
     door_roll = random.choice(big_dice_options)
     door_unlocked = False
     mood = "bad_mood"
 
     if door_roll in range (1, 17):
         door_unlocked = True
-        print("    |    The door is unlocked")
-        print("    |    You go inside to see a Scientist working")
-        input("    |    Roll the dice to find out if the Scientist is in a good or bad mood. (Press enter)")
+        print("    |    The door is unlocked!")
+        print("    |    You go inside to see a Scientist working..")
+        input("    |    Roll the dice to find out if the Scientist is in a good or bad mood? (Press enter)")
 
         mood_roll = random.choice(small_dice_options)
         print("    |    ")
@@ -505,6 +540,7 @@ if not input_invalid:
                                      if key == mood for outcome in outcomes]
 
         print(f"    |    The possible cloning outcomes are: {possible_cloning_outcomes}")
+        print("    |    ")
         input(
             "    |    Continue to find out what happens when the Scientist attempts their experiment. (Press enter)")
 
@@ -537,21 +573,30 @@ if not input_invalid:
         print("    |    The door is locked and you cannot enter.")
 
     # Print out the updated combat strength and health points for the Hero and Monster
-    print("")
+    print("    |    ")
     print("    |    The Hero and Monster Combat Strength and Health Points are set as follows:")
-    print(f"Hero's Health Points: {health_points}")
-    print(f"Hero's Combat Strength: {combat_strength}")
-    print(f"Monster's Health Points: {m_health_points}")
-    print(f"Monster's Combat Strength: {m_combat_strength}")
-    print("")
+    print(f"    |    Hero's Health Points: {health_points}")
+    print(f"    |    Hero's Combat Strength: {combat_strength}")
+    print(f"    |    Monster's Health Points: {m_health_points}")
+    print(f"    |    Monster's Combat Strength: {m_combat_strength}")
+    print("    |    ")
     print("    ------------------------------------------------------------------")
 
     # ---------------------------JAMES: DRAGON'S DEN-------------------------------------
-
-    print("The hero has selected these dragons from the Dragon's Den:", [dragon['name'] for dragon in hero_dragons])
+    print("    |    ")
+    print("    |    The Hero continues down the road and comes across a scary looking cave.")
+    print("    |    Something enormous is moving inside..")
+    print("    |    Is this the Monster?")
+    print("    |    No! It is a den full of friendly but dangerously fierce dragons!")
+    print("    |    These might be able to help the Hero in the fight against the Monster..")
+    print("    |    The Hero has selected these dragons from the Dragon's Den:", [dragon['name'] for dragon in hero_dragons])
 
     # Fight Sequence
     # Loop while the monster and the player are alive. Call fight sequence functions
+    print("    |    ")
+    print("    |    Just in time!!")
+    print("    |    Here comes the Monster, and now the Hero must face it!")
+    print("    |    ")
     print("    ------------------------------------------------------------------")
     print("    |    You meet the monster. FIGHT!!")
 
@@ -561,16 +606,16 @@ if not input_invalid:
 
         # Check to see if the wizard appears to assist the hero
         if health_points <= 6:
-            print("     |     A wizard appears in a burst of magical energy!")
+            print("    |    A wizard appears in a burst of magical energy!")
 
             if health_points % 2 == 0:  # Even number health points: Grant temporary invincibility
-                print("     |     The wizard casts a spell...You are invincible for one attack!")
+                print("    |    The wizard casts a spell...You are invincible for one attack!")
                 wizard_protection = True  # Set protection flag
 
             else:  # Odd number health points: Gain 10 health points
-                print("     |     The wizard waves his staff...The spell heals you by 10 health points!")
+                print("    |    The wizard waves his staff...The spell heals you by 10 health points!")
                 health_points += 10
-                print("     |     Your new health is: " + str(health_points) + "HP")
+                print("    |    Your new health is: " + str(health_points) + " health points")
 
 
         # Fight Sequence
@@ -588,22 +633,22 @@ if not input_invalid:
             for dragon in hero_dragons:
                 if health_points < 10 and health_points % 2 == 0:  # First level: Health check for Shield
                     if dragon["role"] == "Shield":  # Second level: Role check
-                        print(f" {dragon['name']} will shield you from the monster's attack!")
-                        print(f"     |  {dragon['name']} shields you from damage!")
+                        print(f"    |    {dragon['name']} will shield you from the monster's attack!")
+                        print(f"    |    {dragon['name']} shields you from damage!")
                         health_points += 10
-                        print("health points: " + str(health_points))
+                        print("    |    health points: " + str(health_points))
                         break  # Stop after the first Shield dragon acts
 
                 elif 10 < health_points < 20 and health_points % 2 != 0:  # First level: Health check for Attack
                     if dragon["role"] == "Attack":  # Second level: Role check
-                        print(f" {dragon['name']} joins the attack!")
-                        print(f"     |  {dragon['name']} attacks causing damage!")
+                        print(f"    |    {dragon['name']} joins the attack!")
+                        print(f"    |    {dragon['name']} attacks causing damage!")
                         m_health_points -= 5
-                        print("monster health points: " + str(m_health_points))
+                        print("    |    monster health points: " + str(m_health_points))
                         break  # Stop after the first Attack dragon acts
 
                 else:  # Handles the case where the dragon neither shields nor attacks
-                    print(f"The monster strikes fear in {dragon['name']} who does not act this turn.")
+                    print(f"    |    The monster strikes fear in {dragon['name']} who does not act this turn.")
 
             # Hero attacks the monster
             m_health_points = functions.hero_attacks(combat_strength, m_health_points)
@@ -613,11 +658,11 @@ if not input_invalid:
             else:
                 print("    |", end="    ")
                 print("--------------------------------------------------")
-                input("     |     The monster strikes (Press enter)!!!")
+                input("    |    The monster strikes (Press enter)!!!")
 
                 # Monster attacks hero
                 if wizard_protection:
-                    print("     |     The wizard’s magic shields you! No damage taken.")
+                    print("    |    The wizard’s magic shields you! No damage taken.")
                     wizard_protection = False  # Remove protection after one attack
                 else:
                     health_points = functions.monster_attacks(m_combat_strength, health_points)
@@ -636,27 +681,27 @@ if not input_invalid:
                 if health_points < 20:  # First level: Check health range
                     if health_points < 10 and health_points % 2 == 0:  # Second level: Check shield condition
                         if dragon["role"] == "Shield":  # Third level: Check dragon's role
-                            print(f" {dragon['name']} will shield you from the monster's attack!")
-                            print(f"     |  {dragon['name']} shields you from damage!")
+                            print(f"    |    {dragon['name']} will shield you from the monster's attack!")
+                            print(f"    |    {dragon['name']} shields you from damage!")
                             health_points += 10
-                            print("health points: " + str(health_points))
+                            print("    |    health points: " + str(health_points))
                             break  # Stop after the first Shield dragon acts
 
                     elif 10 < health_points < 20 and health_points % 2 != 0:  # Second level: Check attack condition
                         if dragon["role"] == "Attack":  # Third level: Check dragon's role
-                            print(f" {dragon['name']} joins the attack!")
-                            print(f"     |  {dragon['name']} attacks causing damage!")
+                            print(f"    |    {dragon['name']} joins the attack!")
+                            print(f"    |    {dragon['name']} attacks causing damage!")
                             m_health_points -= 5
-                            print("monster health points: " + str(m_health_points))
+                            print("    |    monster health points: " + str(m_health_points))
                             break  # Stop after the first Attack dragon acts
 
                 else:
                     # This handles the case where the dragon neither shields nor attacks
-                    print(f"The monster strikes fear in {dragon['name']} who does not act this turn.")
+                    print(f"    |    The monster strikes fear in {dragon['name']} who does not act this turn.")
 
             # Monster attacks the hero
             if wizard_protection:
-                print("     |     The wizard’s magic shields you! No damage taken.")
+                print("    |    The wizard’s magic shields you! No damage taken.")
                 wizard_protection = False  # Remove protection after one attack
             else:
                 health_points = functions.monster_attacks(m_combat_strength, health_points)
@@ -666,6 +711,7 @@ if not input_invalid:
             else:
                 print("    |", end="    ")
                 print("----------------------------------------------------")
+                print("    |", end="    ")
                 input("The hero strikes (Press enter)")
 
                 # Hero attacks the monster
